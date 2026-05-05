@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🎰 SlotVerse Casino</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#FFD700; --amber:#FF8C00; --gold-lt:#FFF0A0;
+  --bg:#060610; --surface:#10102a; --surface2:#18183a;
+  --border:rgba(255,215,0,0.15); --border-b:rgba(255,215,0,0.4);
+  --txt:#e8e0ff; --dim:rgba(232,224,255,0.4); --dimmer:rgba(232,224,255,0.2);
+  --green:#00E676; --red:#FF3D71; --teal:#34D399;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── BG ── */
+.bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.07;animation:orbF 14s ease-in-out infinite alternate}
+.orb:nth-child(1){width:520px;height:520px;background:#6B21A8;top:-120px;left:-120px}
+.orb:nth-child(2){width:420px;height:420px;background:#1D4ED8;bottom:-80px;right:-80px;animation-delay:-5s}
+.orb:nth-child(3){width:320px;height:320px;background:#D97706;top:45%;left:42%;animation-delay:-9s}
+@keyframes orbF{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,28px) scale(1.14)}}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,215,0,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,215,0,.022) 1px,transparent 1px);
+  background-size:60px 60px}
+
+/* ══ LOBBY ══════════════════════════════════════ */
+#lobby{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 80px}
+
+.logo-area{width:100%;max-width:980px;padding:28px 0 20px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.logo{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,6vw,3.6rem);font-weight:900;
+  background:linear-gradient(135deg,#FFF0A0,#FFD700,#FF8C00,#FFD700);background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:3px;animation:logoS 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 20px rgba(255,215,0,.3))}
+@keyframes logoS{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.logo-sub{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:9px;color:var(--dim);text-transform:uppercase}
+
+.bal-strip{width:100%;max-width:420px;
+  background:linear-gradient(135deg,rgba(16,16,42,.95),rgba(24,24,58,.95));
+  border:1px solid var(--border-b);border-radius:60px;padding:11px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  box-shadow:0 0 36px rgba(255,215,0,.07),inset 0 1px 0 rgba(255,255,255,.05);
+  margin:18px 0 34px;backdrop-filter:blur(12px)}
+.bal-lbl{font-size:.63rem;letter-spacing:4px;color:var(--dim);text-transform:uppercase}
+.bal-amt{font-family:'Cinzel',serif;font-size:1.5rem;font-weight:700;color:var(--gold);line-height:1}
+.bal-div{width:1px;height:28px;background:var(--border)}
+
+.sec-head{width:100%;max-width:980px;display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.sec-head::before,.sec-head::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.sec-txt{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:6px;color:var(--dim);text-transform:uppercase;white-space:nowrap}
+
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px;width:100%;max-width:980px}
+
+.gcard{position:relative;background:var(--surface);border-radius:22px;overflow:hidden;cursor:pointer;
+  border:1px solid rgba(255,255,255,.06);
+  transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s,border-color .3s;
+  animation:cardIn .6s cubic-bezier(.22,1,.36,1) both}
+.gcard:nth-child(1){animation-delay:.05s}.gcard:nth-child(2){animation-delay:.12s}
+.gcard:nth-child(3){animation-delay:.19s}.gcard:nth-child(4){animation-delay:.26s}.gcard:nth-child(5){animation-delay:.33s}
+@keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.gcard:hover{transform:translateY(-7px) scale(1.01);box-shadow:0 26px 65px rgba(0,0,0,.6),0 0 0 1px var(--border-b);border-color:var(--border-b)}
+
+.cbanner{height:158px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cbg{position:absolute;inset:0;transition:transform .5s ease}
+.gcard:hover .cbg{transform:scale(1.06)}
+.coverlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05),rgba(0,0,0,.52))}
+.csyms{position:relative;z-index:2;display:flex;gap:10px;align-items:center;filter:drop-shadow(0 4px 14px rgba(0,0,0,.7))}
+.csym{font-size:clamp(1.9rem,5vw,2.7rem);line-height:1}
+.cbadge{position:absolute;z-index:3;top:11px;right:11px;font-size:.57rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+.hot{background:linear-gradient(135deg,#DC2626,#EA580C);color:#fff}
+.new{background:linear-gradient(135deg,#059669,#0D9488);color:#fff}
+.vip{background:linear-gradient(135deg,#7C3AED,#C026D3);color:#fff}
+
+.g-fruit .cbg{background:linear-gradient(160deg,#052e16,#14532d,#166534)}
+.g-egypt .cbg{background:linear-gradient(160deg,#1c1003,#451a03,#78350f)}
+.g-space .cbg{background:linear-gradient(160deg,#030712,#0f172a,#1e1b4b)}
+.g-lucky .cbg{background:linear-gradient(160deg,#0c0014,#2e1065,#4c1d95)}
+.g-ocean .cbg{background:linear-gradient(160deg,#022c22,#064e3b,#0c4a6e)}
+
+.cbody{padding:17px 20px 19px}
+.cstars{color:var(--gold);font-size:.67rem;margin-bottom:5px;letter-spacing:2px}
+.cname{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;margin-bottom:5px;
+  background:linear-gradient(135deg,#fff 60%,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cdesc{font-size:.77rem;color:var(--dim);margin-bottom:14px;line-height:1.6}
+.cfooter{display:flex;align-items:center;justify-content:space-between}
+.crtp{font-size:.68rem;font-weight:600;color:var(--green);letter-spacing:1px}
+.crtp span{opacity:.5}
+.cplay{background:linear-gradient(135deg,var(--gold),var(--amber));color:#000;border:none;border-radius:50px;
+  padding:8px 21px;font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:1.5px;
+  cursor:pointer;text-transform:uppercase;transition:all .2s;position:relative;overflow:hidden}
+.cplay::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.28),transparent)}
+.cplay:hover{transform:scale(1.07);box-shadow:0 6px 22px rgba(255,165,0,.45)}
+
+/* ══ GAME SCREEN ══════════════════════════════ */
+#gs{display:none;position:fixed;inset:0;z-index:200;flex-direction:column;align-items:center;background:var(--bg);overflow-y:auto}
+#gs.on{display:flex}
+
+.topbar{position:sticky;top:0;z-index:50;width:100%;
+  background:rgba(6,6,16,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);padding:9px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tbback{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:38px;height:38px;font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
+.tbback:hover{background:rgba(255,255,255,.14)}
+.tbmid{text-align:center;flex:1}
+.tbname{font-family:'Cinzel',serif;font-size:.98rem;font-weight:700;color:var(--gold);line-height:1}
+.tbsub{font-size:.58rem;letter-spacing:4px;color:var(--dimmer);text-transform:uppercase;margin-top:2px}
+.tbbbal{background:rgba(255,215,0,.08);border:1px solid var(--border-b);border-radius:50px;
+  padding:5px 13px;font-family:'Cinzel',serif;font-size:.92rem;font-weight:700;color:var(--gold);white-space:nowrap;flex-shrink:0}
+
+.gcontent{width:100%;max-width:660px;padding:14px 14px 40px;display:flex;flex-direction:column;align-items:center;gap:11px}
+
+/* jackpot bar */
+.jpbar{width:100%;background:linear-gradient(135deg,rgba(120,53,15,.38),rgba(120,53,15,.14));
+  border:1px solid rgba(251,191,36,.22);border-radius:14px;padding:9px 18px;
+  display:flex;justify-content:space-between;align-items:center}
+.jpitem{text-align:center}
+.jplbl{font-size:.57rem;letter-spacing:4px;color:rgba(251,191,36,.5);text-transform:uppercase;margin-bottom:2px}
+.jpval{font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;color:var(--gold);animation:jpP 1.8s ease-in-out infinite alternate}
+@keyframes jpP{from{opacity:.8;filter:brightness(1)}to{opacity:1;filter:brightness(1.28)}}
+.jpsep{width:1px;height:34px;background:rgba(251,191,36,.14)}
+
+/* ── SLOT MACHINE ── */
+.machine{width:100%;background:linear-gradient(160deg,#0e0e24,#080818);
+  border:1.5px solid var(--border-b);border-radius:22px;padding:15px 13px;position:relative;
+  box-shadow:0 0 55px rgba(0,0,0,.8),0 0 0 1px rgba(255,215,0,.04),inset 0 1px 0 rgba(255,255,255,.04)}
+.machine::before,.machine::after{content:'✦';position:absolute;top:10px;font-size:.78rem;color:rgba(255,215,0,.28)}
+.machine::before{left:13px}.machine::after{right:13px}
+
+/* payline visual bars */
+.plbar{position:absolute;left:13px;right:13px;height:2px;border-radius:2px;opacity:0;transition:opacity .3s;z-index:8;pointer-events:none}
+.plbar.show{opacity:1;animation:plF .5s ease 3}
+@keyframes plF{0%,100%{opacity:1}50%{opacity:.25}}
+#pl0{background:rgba(255,215,0,.75);box-shadow:0 0 8px rgba(255,215,0,.5)}
+#pl1{background:rgba(0,230,118,.75);box-shadow:0 0 8px rgba(0,230,118,.5)}
+#pl2{background:rgba(0,180,216,.75);box-shadow:0 0 8px rgba(0,180,216,.5)}
+
+.reels{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;position:relative}
+
+.reel{background:#05050f;border:1px solid rgba(255,215,0,.12);border-radius:12px;
+  height:216px;position:relative;overflow:hidden}
+.reel::before,.reel::after{content:'';position:absolute;left:0;right:0;height:34px;z-index:4;pointer-events:none}
+.reel::before{top:0;background:linear-gradient(to bottom,rgba(8,8,24,.94),transparent)}
+.reel::after{bottom:0;background:linear-gradient(to top,rgba(8,8,24,.94),transparent)}
+.reel-mid{position:absolute;top:72px;left:0;right:0;height:72px;
+  border-top:1px solid rgba(255,215,0,.1);border-bottom:1px solid rgba(255,215,0,.1);
+  background:rgba(255,215,0,.022);z-index:2;pointer-events:none}
+.rstrip{position:relative;z-index:3;display:flex;flex-direction:column;will-change:transform}
+.sym{height:72px;width:100%;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(1.75rem,4vw,2.2rem);line-height:1;flex-shrink:0;user-select:none;transition:background .15s}
+.sym.win{animation:symW .35s ease 4}
+@keyframes symW{0%,100%{background:transparent;border-radius:0}50%{background:rgba(255,215,0,.22);border-radius:8px}}
+.sym.scatter-glow{animation:symSc .4s ease 3}
+@keyframes symSc{0%,100%{background:transparent}50%{background:rgba(52,211,153,.28);border-radius:8px}}
+
+/* ── CONTROLS ── */
+.ctrls{width:100%;display:flex;flex-direction:column;gap:10px}
+.ctrl2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cbox{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:11px 13px}
+.clbl{font-size:.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--dimmer);margin-bottom:7px;display:block}
+.bstep{display:flex;align-items:center;gap:7px}
+.barr{background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);color:var(--gold);
+  border-radius:8px;width:31px;height:31px;font-size:1rem;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.barr:hover{background:rgba(255,215,0,.2);border-color:var(--gold)}
+.bnum{flex:1;text-align:center;font-family:'Cinzel',serif;font-size:1.08rem;font-weight:700;color:#fff}
+.bsub{font-size:.63rem;color:var(--dimmer);margin-top:4px;text-align:right}
+
+.lpills{display:flex;gap:5px}
+.lpill{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:9px;
+  color:var(--dim);font-family:'Outfit',sans-serif;font-size:.84rem;font-weight:600;padding:7px 0;cursor:pointer;
+  transition:all .2s;text-align:center}
+.lpill.on{background:rgba(255,215,0,.13);border-color:rgba(255,215,0,.48);color:var(--gold)}
+.lpill:hover:not(.on){border-color:rgba(255,215,0,.24);color:rgba(255,215,0,.6)}
+
+.sprow{display:flex;gap:8px;align-items:stretch}
+.spinbtn{flex:1;background:linear-gradient(135deg,#FFF0A0,#FFD700,#FF8C00);background-size:200% 200%;
+  color:#000;border:none;border-radius:14px;padding:16px;
+  font-family:'Cinzel',serif;font-size:1rem;font-weight:700;letter-spacing:3px;cursor:pointer;
+  transition:all .2s;box-shadow:0 7px 28px rgba(255,165,0,.3),inset 0 1px 0 rgba(255,255,255,.3);
+  animation:spIdle 3s ease-in-out infinite;text-transform:uppercase}
+@keyframes spIdle{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.spinbtn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 38px rgba(255,165,0,.45)}
+.spinbtn:disabled{opacity:.4;cursor:not-allowed;transform:none;animation:none;box-shadow:none}
+.spinbtn.sp{animation:spActive .25s ease-in-out infinite alternate}
+@keyframes spActive{from{box-shadow:0 6px 24px rgba(255,165,0,.3)}to{box-shadow:0 10px 38px rgba(255,165,0,.6)}}
+.maxbtn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--dim);
+  border-radius:14px;padding:0 15px;font-size:.7rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
+.maxbtn:hover{border-color:var(--gold);color:var(--gold)}
+
+.autorow{display:flex;gap:6px}
+.abtn{flex:1;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;color:var(--dimmer);font-size:.7rem;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;padding:8px 0;cursor:pointer;transition:all .2s}
+.abtn:hover{color:#b39ddb;border-color:rgba(179,157,219,.35)}
+.abtn.on{background:rgba(124,77,255,.15);border-color:rgba(124,77,255,.45);color:#b39ddb}
+.astop{color:rgba(255,61,113,.5);border-color:rgba(255,61,113,.12)}
+.astop:hover,.astop.on{background:rgba(255,61,113,.12);border-color:rgba(255,61,113,.45);color:var(--red)}
+
+/* free spin badge */
+.fsbadge{display:none;width:100%;
+  background:linear-gradient(135deg,rgba(5,150,105,.22),rgba(52,211,153,.12));
+  border:1px solid rgba(52,211,153,.45);border-radius:12px;padding:10px 18px;text-align:center;
+  font-family:'Cinzel',serif;font-size:.95rem;font-weight:700;color:var(--teal);letter-spacing:2px;
+  animation:fsPulse 1s ease-in-out infinite alternate}
+@keyframes fsPulse{from{box-shadow:0 0 8px rgba(52,211,153,.14)}to{box-shadow:0 0 24px rgba(52,211,153,.38);border-color:rgba(52,211,153,.85)}}
+
+/* win panel */
+.winpanel{width:100%;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:13px 17px;display:flex;align-items:center;justify-content:space-between;min-height:60px}
+.winleft{display:flex;flex-direction:column;gap:3px}
+.wlbl{font-size:.59rem;letter-spacing:4px;text-transform:uppercase;color:var(--dimmer)}
+.wlbl.w{color:rgba(255,215,0,.6)}
+.wamt{font-family:'Cinzel',serif;font-size:1.85rem;font-weight:700;color:var(--gold);display:none;line-height:1;animation:wPop .4s cubic-bezier(.22,1,.36,1)}
+@keyframes wPop{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
+.wcombo{font-size:.7rem;color:var(--dim);margin-top:1px}
+.wemoji{font-size:2.1rem}
+
+/* stats */
+.statsbar{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sbox{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:9px 7px;text-align:center}
+.sv{font-family:'Cinzel',serif;font-size:.95rem;font-weight:700;color:var(--gold)}
+.sl{font-size:.57rem;letter-spacing:2px;text-transform:uppercase;color:var(--dimmer);margin-top:2px}
+
+.ptbtn{width:100%;background:none;border:1px solid rgba(255,255,255,.08);border-radius:10px;
+  color:var(--dimmer);font-size:.68rem;letter-spacing:3px;text-transform:uppercase;padding:8px;cursor:pointer;transition:all .2s}
+.ptbtn:hover{border-color:rgba(255,215,0,.3);color:var(--gold)}
+.ptpanel{width:100%;display:none;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden}
+.ptpanel.open{display:block}
+.pthdr{padding:9px 13px;font-size:.58rem;letter-spacing:5px;text-transform:uppercase;color:var(--dimmer);border-bottom:1px solid rgba(255,255,255,.06)}
+.ptrow{display:flex;align-items:center;justify-content:space-between;padding:7px 13px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.8rem}
+.ptrow:last-child{border:none}
+.ptsyms{font-size:.95rem;letter-spacing:3px}
+.ptm{color:var(--gold);font-weight:700;font-size:.8rem}
+.ptfoot{padding:7px 13px;font-size:.65rem;color:var(--dimmer);border-top:1px solid rgba(255,255,255,.05)}
+
+/* ══ POPUPS ══════════════════════════════════ */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:700;
+  align-items:center;justify-content:center;flex-direction:column;gap:13px;padding:24px}
+.overlay.show{display:flex}
+
+/* jackpot */
+.jptitle{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,9vw,4.5rem);font-weight:900;
+  background:linear-gradient(135deg,#FFF0A0,#FFD700,#FF8C00,#FFD700);background-size:300% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-align:center;animation:popA .4s ease-in-out infinite alternate}
+@keyframes popA{from{transform:scale(.97)}to{transform:scale(1.04)}}
+.jpamt{font-family:'Cinzel',serif;font-size:clamp(1.4rem,5vw,2.4rem);color:#fff;text-align:center}
+.jpclose{background:linear-gradient(135deg,var(--gold),var(--amber));color:#000;border:none;
+  border-radius:50px;padding:13px 46px;font-family:'Cinzel',serif;font-size:.95rem;font-weight:700;
+  letter-spacing:3px;cursor:pointer;text-transform:uppercase;box-shadow:0 8px 30px rgba(255,165,0,.4);transition:transform .2s}
+.jpclose:hover{transform:scale(1.05)}
+
+/* free spin */
+.fstitle{font-family:'Cinzel Decorative',serif;font-size:clamp(1.8rem,7vw,3.6rem);font-weight:900;
+  background:linear-gradient(135deg,#A7F3D0,#34D399,#059669,#34D399);background-size:300% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-align:center;animation:popA .42s ease-in-out infinite alternate}
+.fssub{font-family:'Cinzel',serif;font-size:.92rem;color:rgba(52,211,153,.7);letter-spacing:3px;text-transform:uppercase}
+.fscountbox{display:flex;flex-direction:column;align-items:center;
+  background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.28);border-radius:18px;padding:18px 46px;gap:3px}
+.fsnum{font-family:'Cinzel Decorative',serif;font-size:clamp(3.2rem,12vw,5.5rem);font-weight:900;
+  color:var(--teal);line-height:1;text-shadow:0 0 36px rgba(52,211,153,.5);animation:popA .5s ease-in-out infinite alternate}
+.fsnumlbl{font-size:.72rem;letter-spacing:6px;color:rgba(52,211,153,.45);text-transform:uppercase}
+.fsdesc{font-size:.82rem;color:rgba(255,255,255,.4);text-align:center;max-width:270px;line-height:1.6}
+.fsbtn{background:linear-gradient(135deg,#059669,#34D399);color:#000;border:none;border-radius:50px;
+  padding:14px 50px;font-family:'Cinzel',serif;font-size:.95rem;font-weight:700;
+  letter-spacing:3px;cursor:pointer;text-transform:uppercase;box-shadow:0 8px 28px rgba(52,211,153,.32);transition:transform .2s}
+.fsbtn:hover{transform:scale(1.05)}
+
+/* ══ WINNER TOAST ════════════════════════════ */
+#toast-wrap{position:fixed;bottom:0;left:0;right:0;z-index:900;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;gap:7px;padding-bottom:18px}
+.toast{
+  display:flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,rgba(10,10,28,.97),rgba(18,18,42,.97));
+  border:1px solid rgba(255,215,0,.28);border-radius:14px;
+  padding:11px 18px;max-width:380px;width:calc(100% - 32px);
+  box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 1px rgba(255,215,0,.06);
+  animation:toastIn .4s cubic-bezier(.22,1,.36,1) both;
+  pointer-events:auto;
+}
+.toast.out{animation:toastOut .35s ease forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(20px)}}
+.toast-icon{font-size:1.6rem;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(255,215,0,.4))}
+.toast-body{flex:1;min-width:0}
+.toast-name{font-family:'Cinzel',serif;font-size:.82rem;font-weight:700;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast-msg{font-size:.72rem;color:var(--dim);margin-top:1px;line-height:1.4}
+.toast-amt{font-family:'Cinzel',serif;font-size:1rem;font-weight:700;color:var(--green);flex-shrink:0}
+
+/* scrollbar */
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,215,0,.14);border-radius:2px}
+
+/* ── MULTIPLIER MANIA theme ── */
+.g-multi .cbg{background:linear-gradient(160deg,#0a0020,#1a0060,#2d0090)}
+
+/* reel cell: needs relative for overlay */
+.sym{position:relative}
+
+/* Symbol vanish & respawn animation */
+@keyframes symVanish{0%{transform:scale(1);opacity:1}40%{transform:scale(1.3);opacity:0}100%{transform:scale(0);opacity:0}}
+@keyframes symAppear{0%{transform:scale(0) rotate(-20deg);opacity:0}70%{transform:scale(1.15) rotate(4deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+.sym.vanish{animation:symVanish .35s ease forwards}
+.sym.appear{animation:symAppear .4s cubic-bezier(.22,1,.36,1) forwards}
+
+/* Multiplier symbol that drops on reel */
+.sym.is-mult{
+  background:linear-gradient(135deg,#1a0040,#3d0090);
+  border-radius:10px;
+  border:2px solid rgba(167,139,250,.6);
+  box-shadow:0 0 14px rgba(139,92,246,.5);
+  animation:symAppear .4s cubic-bezier(.22,1,.36,1) forwards;
+}
+.sym.is-mult .sym-inner{
+  font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(1rem,3vw,1.4rem);
+  background:linear-gradient(135deg,#e9d5ff,#c084fc,#7c3aed);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* Stored multiplier bar */
+.stored-mult-bar{
+  display:none;width:100%;
+  background:linear-gradient(135deg,rgba(30,0,80,.5),rgba(15,0,45,.5));
+  border:1px solid rgba(139,92,246,.4);border-radius:14px;
+  padding:10px 16px;
+}
+.stored-mult-bar.show{display:block}
+.smb-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.smb-lbl{font-size:.6rem;letter-spacing:3px;color:rgba(167,139,250,.6);text-transform:uppercase}
+.smb-val{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;
+  background:linear-gradient(135deg,#e9d5ff,#c084fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:storedPulse 1.4s ease-in-out infinite alternate}
+@keyframes storedPulse{from{filter:brightness(1)}to{filter:brightness(1.5) drop-shadow(0 0 6px rgba(192,132,252,.6))}}
+.smb-reset{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--dimmer);
+  border-radius:8px;padding:4px 10px;font-size:.65rem;letter-spacing:2px;cursor:pointer;
+  text-transform:uppercase;transition:all .2s}
+.smb-reset:hover{color:var(--red);border-color:var(--red)}
+
+/* Multiplier grid panel */
+.multi-panel{
+  display:none;width:100%;
+  background:linear-gradient(135deg,rgba(30,0,80,.4),rgba(10,0,30,.4));
+  border:1px solid rgba(139,92,246,.3);border-radius:14px;
+  padding:12px 14px;
+}
+.multi-panel.show{display:block}
+.mp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mp-title{font-size:.6rem;letter-spacing:4px;color:rgba(139,92,246,.6);text-transform:uppercase}
+.mp-stored-badge{font-family:'Cinzel',serif;font-size:.75rem;font-weight:700;
+  color:#c084fc;background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.4);
+  border-radius:20px;padding:2px 10px;display:none}
+.mp-stored-badge.show{display:block}
+.mp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:8px}
+.mpb{display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:9px;padding:7px 4px;cursor:default;transition:all .25s;position:relative;overflow:hidden}
+/* Color tiers */
+.mpb[data-t="1"]{--tc:#6b7280;--bg:rgba(55,65,81,.2)}
+.mpb[data-t="2"]{--tc:#16a34a;--bg:rgba(22,101,52,.2)}
+.mpb[data-t="3"]{--tc:#2563eb;--bg:rgba(37,99,235,.2)}
+.mpb[data-t="4"]{--tc:#7c3aed;--bg:rgba(109,40,217,.2)}
+.mpb[data-t="5"]{--tc:#dc2626;--bg:rgba(220,38,38,.2)}
+.mpb[data-t="6"]{--tc:#b45309;--bg:rgba(180,83,9,.2)}
+.mpb[data-t="7"]{--tc:#0891b2;--bg:rgba(8,145,178,.2)}
+.mpb[data-t="8"]{--tc:#be185d;--bg:rgba(190,24,93,.2)}
+.mpb[data-t="9"]{--tc:#065f46;--bg:rgba(6,95,70,.2)}
+.mpb[data-t="10"]{--tc:#FFD700;--bg:rgba(255,215,0,.12)}
+.mpb.lit{background:var(--bg)!important;border-color:var(--tc)!important;transform:scale(1.1);box-shadow:0 0 12px rgba(255,255,255,.1)}
+.mpb.stored{border-style:dashed;border-color:var(--tc);background:var(--bg)}
+.mpb-val{font-family:'Cinzel',serif;font-size:.85rem;font-weight:900;color:var(--tc);line-height:1}
+.mpb-lbl{font-size:.48rem;letter-spacing:1px;color:var(--dimmer);text-transform:uppercase;text-align:center}
+/* 100x special */
+.mpb[data-t="10"] .mpb-val{font-size:.8rem;
+  background:linear-gradient(135deg,#FFF0A0,#FFD700,#FF8C00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.mp-result{font-family:'Cinzel',serif;font-size:.95rem;font-weight:700;color:var(--teal);
+  text-align:center;min-height:22px}
+.mp-result.big{color:var(--gold);font-size:1.1rem;animation:wPop .4s cubic-bezier(.22,1,.36,1)}
+
+/* Scatter result popup (inside game screen) */
+.scatter-result-box{
+  display:none;width:100%;
+  background:linear-gradient(135deg,rgba(5,60,45,.5),rgba(2,30,22,.5));
+  border:1px solid rgba(52,211,153,.4);border-radius:14px;
+  padding:14px 18px;text-align:center;
+}
+.scatter-result-box.show{display:block;animation:wPop .4s cubic-bezier(.22,1,.36,1)}
+.srb-congrats{font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,4vw,1.5rem);font-weight:900;
+  background:linear-gradient(135deg,#A7F3D0,#34D399);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:4px}
+.srb-msg{font-size:.78rem;color:rgba(52,211,153,.7);margin-bottom:8px}
+.srb-amounts{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.srb-item{text-align:center}
+.srb-item-lbl{font-size:.58rem;letter-spacing:3px;color:var(--dimmer);text-transform:uppercase;margin-bottom:2px}
+.srb-item-val{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--teal)}
+
+</style>
+</head>
+<body>
+<div class="bg-wrap"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+<div class="bg-grid"></div>
+
+<!-- ══ LOBBY ══════════════════════════════════ -->
+<div id="lobby">
+  <div class="logo-area">
+    <div class="logo">🎰 SlotVerse</div>
+    <div class="logo-sub">Premium Casino · 6 Games</div>
+  </div>
+
+  <div class="bal-strip">
+    <div><div class="bal-lbl">Saldo</div><div class="bal-amt" id="lobbyBal">10.000</div></div>
+    <div class="bal-div"></div>
+    <span style="font-size:1.3rem">🪙</span>
+    <div><div class="bal-lbl">Koin</div><div class="bal-amt" style="font-size:.95rem;color:var(--dim)">IDR</div></div>
+  </div>
+
+  <div class="sec-head"><div class="sec-txt">Pilih Game Slot</div></div>
+
+  <div class="games-grid">
+    <div class="gcard g-fruit" onclick="openGame('fruit')">
+      <div class="cbanner"><div class="cbg"></div><div class="coverlay"></div>
+        <div class="csyms"><span class="csym">🍒</span><span class="csym" style="font-size:3rem">💎</span><span class="csym">🍋</span></div></div>
+      <div class="cbody"><div class="cstars">★★★★★</div><div class="cname">Fruit Fiesta</div>
+        <div class="cdesc">Slot klasik buah-buahan legendaris. Cherry, diamond & lemon menanti jackpotmu!</div>
+        <div class="cfooter"><div class="crtp">RTP <span>·</span> 96.5%</div><button class="cplay">Main ▶</button></div></div>
+    </div>
+    <div class="gcard g-egypt" onclick="openGame('egypt')">
+      <div class="cbanner"><div class="cbg"></div><div class="coverlay"></div>
+        <div class="cbadge hot">🔥 HOT</div>
+        <div class="csyms"><span class="csym">👑</span><span class="csym" style="font-size:3rem">🔱</span><span class="csym">🏺</span></div></div>
+      <div class="cbody"><div class="cstars">★★★★★</div><div class="cname">Pharaoh's Gold</div>
+        <div class="cdesc">Buka harta tersembunyi di piramida Mesir kuno bersama sang Firaun!</div>
+        <div class="cfooter"><div class="crtp">RTP <span>·</span> 97.2%</div><button class="cplay">Main ▶</button></div></div>
+    </div>
+    <div class="gcard g-space" onclick="openGame('space')">
+      <div class="cbanner"><div class="cbg"></div><div class="coverlay"></div>
+        <div class="cbadge new">✨ NEW</div>
+        <div class="csyms"><span class="csym">🚀</span><span class="csym" style="font-size:3rem">🛸</span><span class="csym">🌌</span></div></div>
+      <div class="cbody"><div class="cstars">★★★★☆</div><div class="cname">Galaxy Spin</div>
+        <div class="cdesc">Petualangan galaksi epik — multiplier UFO hingga 40× bisa muncul tiba-tiba!</div>
+        <div class="cfooter"><div class="crtp">RTP <span>·</span> 95.8%</div><button class="cplay">Main ▶</button></div></div>
+    </div>
+    <div class="gcard g-lucky" onclick="openGame('lucky')">
+      <div class="cbanner"><div class="cbg"></div><div class="coverlay"></div>
+        <div class="cbadge vip">💜 VIP</div>
+        <div class="csyms"><span class="csym">🐉</span><span class="csym" style="font-size:3rem">💎</span><span class="csym">🍀</span></div></div>
+      <div class="cbody"><div class="cstars">★★★★☆</div><div class="cname">Lucky Dragon</div>
+        <div class="cdesc">Naga keberuntungan membawa bonus & kemenangan berlipat tanpa henti!</div>
+        <div class="cfooter"><div class="crtp">RTP <span>·</span> 96.0%</div><button class="cplay">Main ▶</button></div></div>
+    </div>
+    <div class="gcard g-ocean" onclick="openGame('ocean')">
+      <div class="cbanner"><div class="cbg"></div><div class="coverlay"></div>
+        <div class="csyms"><span class="csym">🦈</span><span class="csym" style="font-size:3rem">💰</span><span class="csym">🐬</span></div></div>
+      <div class="cbody"><div class="cstars">★★★★★</div><div class="cname">Deep Ocean</div>
+        <div class="cdesc">Menyelam ke dasar samudra — temukan harta legenda yang tersembunyi!</div>
+        <div class="cfooter"><div class="crtp">RTP <span>·</span> 97.5%</div><button class="cplay">Main ▶</button></div></div>
+    </div>
+    <div class="gcard g-multi" onclick="openGame('multi')">
+      <div class="cbanner"><div class="cbg"></div><div class="coverlay"></div>
+        <div class="cbadge hot">🔥 SPESIAL</div>
+        <div class="csyms"><span class="csym">⚡</span><span class="csym" style="font-size:3rem">💥</span><span class="csym">🔵</span></div></div>
+      <div class="cbody"><div class="cstars">★★★★★</div><div class="cname">Multiplier Mania</div>
+        <div class="cdesc">Setiap menang langsung dikalikan 1×–5×! Perkalian tampil di reel secara nyata.</div>
+        <div class="cfooter"><div class="crtp">RTP <span>·</span> 96.8%</div><button class="cplay">Main ▶</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GAME SCREEN ══════════════════════════ -->
+<div id="gs">
+  <div class="topbar">
+    <button class="tbback" onclick="backLobby()">←</button>
+    <div class="tbmid">
+      <div class="tbname" id="gsName">Fruit Fiesta</div>
+      <div class="tbsub">5 Reel · 3 Row · 9 Payline</div>
+    </div>
+    <div class="tbbbal">🪙 <span id="gsBal">10.000</span></div>
+  </div>
+
+  <div class="gcontent">
+    <!-- jackpot bar -->
+    <div class="jpbar">
+      <div class="jpitem"><div class="jplbl">Mini</div><div class="jpval" id="jpMini">15.000</div></div>
+      <div class="jpsep"></div>
+      <div class="jpitem"><div class="jplbl">Jackpot</div><div class="jpval" id="jpMain">75.000</div></div>
+      <div class="jpsep"></div>
+      <div class="jpitem"><div class="jplbl">Mega</div><div class="jpval" id="jpMega">350.000</div></div>
+    </div>
+
+    <!-- 5×3 slot -->
+    <div class="machine">
+      <!-- payline indicator bars — positioned dynamically via JS -->
+      <div class="plbar" id="pl0"></div>
+      <div class="plbar" id="pl1"></div>
+      <div class="plbar" id="pl2"></div>
+      <div class="reels" id="reels"></div>
+    </div>
+
+    <!-- controls -->
+    <div class="ctrls">
+      <div class="ctrl2">
+        <div class="cbox">
+          <span class="clbl">Taruhan / Baris</span>
+          <div class="bstep">
+            <button class="barr" onclick="chgBet(-1)">−</button>
+            <div class="bnum" id="betNum">100</div>
+            <button class="barr" onclick="chgBet(1)">+</button>
+          </div>
+          <div class="bsub" id="betTotal">Total: 500</div>
+        </div>
+        <div class="cbox">
+          <span class="clbl">Paylines</span>
+          <div class="lpills">
+            <button class="lpill" onclick="setLines(1,this)">1</button>
+            <button class="lpill on" onclick="setLines(5,this)">5</button>
+            <button class="lpill" onclick="setLines(9,this)">9</button>
+          </div>
+          <div class="bsub" id="linesSub">5 garis aktif</div>
+        </div>
+      </div>
+
+      <div class="sprow">
+        <button class="spinbtn" id="spinBtn" onclick="doSpin()">⚡ PUTAR</button>
+        <button class="maxbtn" onclick="setMax()">MAX</button>
+      </div>
+
+      <div class="autorow">
+        <button class="abtn" id="a5"  onclick="startAuto(5)">Auto 5</button>
+        <button class="abtn" id="a10" onclick="startAuto(10)">Auto 10</button>
+        <button class="abtn" id="a25" onclick="startAuto(25)">Auto 25</button>
+        <button class="abtn" id="a50" onclick="startAuto(50)">Auto 50</button>
+        <button class="abtn astop" id="aStop" onclick="stopAuto()">Stop</button>
+      </div>
+
+      <div class="fsbadge" id="fsBadge">🎁 FREE SPIN AKTIF: 0</div>
+
+      <div class="winpanel">
+        <div class="winleft">
+          <div class="wlbl" id="wlbl">Tekan PUTAR untuk main</div>
+          <div class="wamt" id="wamt">+0</div>
+          <div class="wcombo" id="wcombo"></div>
+        </div>
+        <div class="wemoji" id="wemoji"></div>
+      </div>
+
+      <div class="statsbar">
+        <div class="sbox"><div class="sv" id="stSp">0</div><div class="sl">Putaran</div></div>
+        <div class="sbox"><div class="sv" id="stW">0</div><div class="sl">Menang</div></div>
+        <div class="sbox"><div class="sv" id="stWR">0%</div><div class="sl">Win Rate</div></div>
+        <div class="sbox"><div class="sv" id="stNet">+0</div><div class="sl">Net</div></div>
+      </div>
+
+      <button class="ptbtn" onclick="togglePT()">📊 Tabel Pembayaran</button>
+      <div class="ptpanel" id="ptPanel"></div>
+
+      <!-- Multiplier Mania panel — only shown for multi game -->
+      <div class="stored-mult-bar" id="storedMultBar">
+        <div class="smb-row">
+          <div>
+            <div class="smb-lbl">Perkalian Tersimpan</div>
+            <div class="smb-val" id="storedMultVal">×1</div>
+          </div>
+          <button class="smb-reset" onclick="resetStoredMult()">Reset ×</button>
+        </div>
+      </div>
+
+      <div class="multi-panel" id="multiPanel">
+        <div class="mp-head">
+          <div class="mp-title">⚡ Tabel Perkalian</div>
+          <div class="mp-stored-badge" id="mpStoredBadge">Tersimpan: ×1</div>
+        </div>
+        <div class="mp-grid" id="mpGrid"></div>
+        <div class="mp-result" id="mpResult"></div>
+      </div>
+
+      <div class="scatter-result-box" id="scatterResultBox">
+        <div class="srb-congrats">🎉 Selamat!</div>
+        <div class="srb-msg" id="srbMsg">Scatter selesai!</div>
+        <div class="srb-amounts" id="srbAmounts"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ JACKPOT POPUP ══ -->
+<div class="overlay" id="jpPop">
+  <div style="font-size:2.4rem;animation:popA .5s ease infinite alternate">🌟✨🌟</div>
+  <div class="jptitle" id="jpTitle">JACKPOT!</div>
+  <div class="jpamt" id="jpAmt">+50.000</div>
+  <button class="jpclose" onclick="closeJP()">🎉 Ambil Hadiah</button>
+</div>
+
+<!-- ══ FREE SPIN POPUP ══ -->
+<div class="overlay" id="fsPop">
+  <div style="font-size:3.2rem;animation:popA .55s ease infinite alternate;filter:drop-shadow(0 0 18px rgba(52,211,153,.6))" id="fsScatterEmoji">⭐⭐⭐</div>
+  <div class="fstitle">FREE SPIN!</div>
+  <div class="fssub" id="fsScatLabel">3 Scatter Muncul!</div>
+  <div class="fscountbox">
+    <div class="fsnum">10</div>
+    <div class="fsnumlbl">Putaran Gratis</div>
+  </div>
+  <div class="fsdesc">Semua putaran gratis! Tidak potong saldo. Setiap kemenangan masuk ke saldo kamu 💸</div>
+  <button class="fsbtn" onclick="closeFSPop()">🎁 Mulai Sekarang!</button>
+</div>
+
+<!-- ══ TOAST CONTAINER ══ -->
+<div id="toast-wrap"></div>
+
+<script>
+/* ══════════════════════════════════════════════
+   GAME CONFIGS
+   Scatter weight sengaja lebih kecil (~5%)
+   agar tidak terlalu sering tapi bisa terjadi
+══════════════════════════════════════════════ */
+const GAMES = {
+  fruit:{
+    name:'Fruit Fiesta',
+    syms:   ['🍒','🍋','🍊','🍇','🍉','🔔','💎','⭐'],
+    wts:    [  32,  26,  20,  14,  10,   7,   4,   5],
+    mults:  {'💎':40,'🔔':18,'🍉':10,'🍇':7,'🍊':4,'🍋':3,'🍒':2},
+    wild:'💎', scatter:'⭐'
+  },
+  egypt:{
+    name:"Pharaoh's Gold",
+    syms:   ['🪲','👁️','🏺','⚱️','🌙','🔱','👑','🌟'],
+    wts:    [  30,  24,  19,  14,  10,   7,   4,   5],
+    mults:  {'👑':40,'🔱':25,'🌙':12,'⚱️':8,'🏺':5,'👁️':3,'🪲':2},
+    wild:'👑', scatter:'🌟'
+  },
+  space:{
+    name:'Galaxy Spin',
+    syms:   ['🌙','🪐','☄️','👾','🌌','💫','🛸','🌠'],
+    wts:    [  30,  24,  19,  14,  10,   7,   4,   5],
+    mults:  {'🛸':40,'💫':25,'🌌':14,'👾':10,'☄️':7,'🪐':4,'🌙':2},
+    wild:'🛸', scatter:'🌠'
+  },
+  lucky:{
+    name:'Lucky Dragon',
+    syms:   ['🎴','🃏','🎯','🍀','🎲','💎','🐉','🎊'],
+    wts:    [  30,  24,  19,  14,  10,   7,   4,   5],
+    mults:  {'🐉':40,'💎':22,'🎲':12,'🍀':8,'🎯':5,'🃏':3,'🎴':2},
+    wild:'🐉', scatter:'🎊'
+  },
+  ocean:{
+    name:'Deep Ocean',
+    syms:   ['🐚','🦀','🐠','🐙','🐬','⚓','💰','🌊'],
+    wts:    [  30,  24,  19,  14,  10,   7,   4,   5],
+    mults:  {'💰':40,'⚓':22,'🐬':12,'🐙':8,'🐠':5,'🦀':3,'🐚':2},
+    wild:'💰', scatter:'🌊'
+  },
+  multi:{
+    name:'Multiplier Mania',
+    /* Simbol biasa + simbol perkalian khusus (⚡=scatter, 💥=wild) */
+    syms:   ['🔴','🟠','🟡','🟢','🔵','🟣','💥','⚡'],
+    wts:    [  32,  26,  21,  16,  11,   7,   4,   5],
+    mults:  {'💥':30,'🟣':18,'🔵':12,'🟢':8,'🟡':5,'🟠':3,'🔴':2},
+    wild:'💥', scatter:'⚡', isMulti:true,
+    /* Tabel perkalian: nilai→{label,tier,weight} — 100x rate sangat rendah */
+    multTable:[
+      {v:1,  lbl:'×1',   tier:1, w:38},
+      {v:2,  lbl:'×2',   tier:2, w:28},
+      {v:3,  lbl:'×3',   tier:3, w:16},
+      {v:5,  lbl:'×5',   tier:4, w:9},
+      {v:8,  lbl:'×8',   tier:5, w:5},
+      {v:10, lbl:'×10',  tier:6, w:2},
+      {v:20, lbl:'×20',  tier:7, w:1.2},
+      {v:30, lbl:'×30',  tier:8, w:.6},
+      {v:50, lbl:'×50',  tier:9, w:.18},
+      {v:100,lbl:'×100', tier:10,w:.02}
+    ]
+  }
+};
+
+/* 9 paylines [row per reel] */
+const PLS = [
+  [1,1,1,1,1],[0,0,0,0,0],[2,2,2,2,2],
+  [0,1,2,1,0],[2,1,0,1,2],[0,0,1,2,2],
+  [2,2,1,0,0],[1,0,1,0,1],[1,2,1,2,1]
+];
+
+/* ══ STATE ══ */
+let bal=10000, bet=100, lines=5;
+let spinning=false, autoCount=0, autoTimer=null;
+let gid=null, stats={sp:0,w:0,net:0};
+let ptOpen=false;
+let jpMiniV=15000, jpMainV=75000, jpMegaV=350000;
+let fsLeft=0, inFS=false;
+let storedMult=1;          /* Multiplier Mania: perkalian tersimpan antar spin */
+let multiScatterWins=[];   /* rekam kemenangan tiap spin free scatter */
+const BETS=[10,25,50,100,200,500,1000,2000]; let bi=3;
+let grid=Array.from({length:5},()=>['','','']);
+
+/* ══ FORMAT ══ */
+const fmt=n=>Math.round(n).toLocaleString('id-ID');
+
+/* ══ RANDOM NAMES for toasts ══ */
+const NAMES=['Budi','Sari','Joko','Dewi','Andi','Rina','Hendra','Putri','Fajar','Nita',
+  'Rizky','Ayu','Doni','Maya','Bagas','Lina','Wahyu','Fitri','Agus','Sinta',
+  'Dika','Nurul','Rendi','Yanti','Irfan','Cici','Hadi','Rara','Teguh','Wulan',
+  'Gilang','Tiara','Arif','Mia','Radit','Sela','Bagus','Nisa','Kevin','Desi'];
+const CITIES=['Jakarta','Surabaya','Bandung','Medan','Semarang','Makassar','Yogyakarta','Palembang','Depok','Bekasi'];
+
+/* ══ UPDATE UI ══ */
+function upBal(){
+  document.getElementById('lobbyBal').textContent=fmt(bal);
+  document.getElementById('gsBal').textContent=fmt(bal);
+}
+function upJP(){
+  document.getElementById('jpMini').textContent=fmt(jpMiniV);
+  document.getElementById('jpMain').textContent=fmt(jpMainV);
+  document.getElementById('jpMega').textContent=fmt(jpMegaV);
+}
+function upStats(){
+  document.getElementById('stSp').textContent=stats.sp;
+  document.getElementById('stW').textContent=stats.w;
+  const wr=stats.sp?Math.round(stats.w/stats.sp*100):0;
+  document.getElementById('stWR').textContent=wr+'%';
+  const n=stats.net, el=document.getElementById('stNet');
+  el.textContent=(n>=0?'+':'')+fmt(n);
+  el.style.color=n>=0?'var(--green)':'var(--red)';
+}
+function upFSBadge(){
+  const b=document.getElementById('fsBadge');
+  if(fsLeft>0){b.textContent=`🎁 FREE SPIN: ${fsLeft} tersisa`;b.style.display='block';}
+  else b.style.display='none';
+}
+function upBetUI(){
+  document.getElementById('betNum').textContent=fmt(bet);
+  document.getElementById('betTotal').textContent='Total: '+fmt(bet*lines);
+  document.getElementById('linesSub').textContent=lines+' garis aktif';
+}
+
+/* ══ OPEN/CLOSE GAME ══ */
+function openGame(id){
+  gid=id; const g=GAMES[id];
+  document.getElementById('gsName').textContent=g.name;
+  stats={sp:0,w:0,net:0}; fsLeft=0; inFS=false;
+  storedMult=1; multiScatterWins=[];
+  resetWin(); upStats(); upBetUI(); upFSBadge();
+  buildReels(); buildPT(); clearPLvis();
+  positionPLbars();
+  /* toggle multi elements */
+  const isM=!!g.isMulti;
+  document.getElementById('multiPanel').classList.toggle('show',isM);
+  document.getElementById('storedMultBar').classList.toggle('show',false);
+  document.getElementById('scatterResultBox').classList.remove('show');
+  document.querySelector('.tbsub').textContent=isM
+    ?'5 Reel · 3 Row · Perkalian 1×–100×'
+    :'5 Reel · 3 Row · 9 Payline';
+  if(isM) buildMultiGrid();
+  document.getElementById('gs').classList.add('on');
+  document.getElementById('lobby').style.display='none';
+  window.scrollTo(0,0);
+}
+function backLobby(){
+  stopAuto(); fsLeft=0; inFS=false;
+  document.getElementById('gs').classList.remove('on');
+  document.getElementById('lobby').style.display='flex';
+  upBal();
+}
+
+/* ══ BUILD REELS ══ */
+function buildReels(){
+  const wrap=document.getElementById('reels'); wrap.innerHTML='';
+  const g=GAMES[gid];
+  for(let r=0;r<5;r++){
+    const col=document.createElement('div'); col.className='reel'; col.id='rc'+r;
+    const mid=document.createElement('div'); mid.className='reel-mid'; col.appendChild(mid);
+    const strip=document.createElement('div'); strip.className='rstrip'; strip.id='rs'+r;
+    for(let row=0;row<3;row++){
+      const s=pick(g); grid[r][row]=s;
+      const cell=document.createElement('div'); cell.className='sym'; cell.id=`s${r}${row}`; cell.textContent=s;
+      strip.appendChild(cell);
+    }
+    col.appendChild(strip); wrap.appendChild(col);
+  }
+}
+
+/* Position payline bars relative to reels container */
+function positionPLbars(){
+  // Row heights: each row=72px, reel starts at padding 15px inside machine
+  // pl bars are absolute inside .machine; reel starts at padding-top 15px
+  // mid row center = 15 + 72 + 36 = 123px from machine top (top row = 15+36=51, bot = 15+144+36=195)
+  const rowH=72, pad=15;
+  const tops=[pad+rowH*0+rowH/2-1, pad+rowH*1+rowH/2-1, pad+rowH*2+rowH/2-1];
+  ['pl0','pl1','pl2'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el) el.style.top=tops[i]+'px';
+  });
+}
+
+/* ══ PICK SYMBOL ══ */
+function pick(g){
+  const tot=g.wts.reduce((a,b)=>a+b,0); let r=Math.random()*tot;
+  for(let i=0;i<g.syms.length;i++){r-=g.wts[i];if(r<=0)return g.syms[i];}
+  return g.syms[0];
+}
+
+/* ══ BET/LINES ══ */
+function chgBet(d){bi=Math.max(0,Math.min(BETS.length-1,bi+d));bet=BETS[bi];upBetUI();}
+function setLines(n,btn){lines=n;document.querySelectorAll('.lpill').forEach(b=>b.classList.remove('on'));btn.classList.add('on');upBetUI();}
+function setMax(){bi=BETS.length-1;bet=BETS[bi];lines=9;document.querySelectorAll('.lpill').forEach(b=>b.classList.remove('on'));upBetUI();}
+
+/* ══ SPIN ══ */
+function doSpin(){
+  if(spinning)return;
+  const isFree=fsLeft>0;
+  const total=isFree?0:bet*lines;
+  if(!isFree&&bal<total){showWin('❌ Saldo tidak cukup!',false,0,'','');stopAuto();return;}
+  if(isFree){fsLeft--;inFS=true;upFSBadge();}
+  else{bal-=total;stats.net-=total;}
+  stats.sp++; upBal(); upStats();
+  resetWin(); clearPLvis(); spinning=true;
+  const btn=document.getElementById('spinBtn');
+  btn.disabled=true; btn.classList.add('sp');
+  btn.textContent=isFree?`🎁 FREE (${fsLeft} sisa)`:'⏳ Berputar...';
+  if(!isFree){jpMiniV+=Math.floor(total*.018);jpMainV+=Math.floor(total*.009);jpMegaV+=Math.floor(total*.005);upJP();}
+  const g=GAMES[gid];
+  /* Build final grid — 36% spin biasa ada forced match */
+  let fg=Array.from({length:5},()=>Array.from({length:3},()=>pick(g)));
+  const forceRate=isFree?.52:.36;
+  if(Math.random()<forceRate){
+    const nonSc=g.syms.filter(s=>s!==g.scatter&&s!==g.wild);
+    const fs2=nonSc[Math.floor(Math.random()*nonSc.length)];
+    const row2=Math.floor(Math.random()*3);
+    for(let r=0;r<3;r++)fg[r][row2]=fs2;
+    if(Math.random()<.38)fg[3][row2]=fs2;
+  }
+  /* Reel animation */
+  const stops=[500,720,940,1150,1360];
+  for(let r=0;r<5;r++)animReel(r,g,stops[r],fg[r]);
+  setTimeout(()=>{
+    for(let r=0;r<5;r++)for(let row=0;row<3;row++){
+      grid[r][row]=fg[r][row];
+      const c=document.getElementById(`s${r}${row}`);
+      if(c){c.textContent=fg[r][row];c.classList.remove('win','scatter-glow');}
+    }
+    evalSpin(fg,total,isFree);
+  },1620);
+}
+
+function animReel(r,g,stop,finalSyms){
+  const strip=document.getElementById('rs'+r);
+  const cells=strip.querySelectorAll('.sym');
+  const iv=setInterval(()=>{cells.forEach(c=>{c.textContent=g.syms[Math.floor(Math.random()*g.syms.length)];});},54);
+  setTimeout(()=>{
+    clearInterval(iv);
+    strip.style.transition='transform .26s cubic-bezier(.25,1.5,.5,1)';
+    strip.style.transform='translateY(-5px)';
+    setTimeout(()=>{strip.style.transform='translateY(0)';finalSyms.forEach((s,i)=>{if(cells[i])cells[i].textContent=s;});},120);
+    setTimeout(()=>{strip.style.transition='';strip.style.transform='';},310);
+  },stop);
+}
+
+/* ══ EVALUATE ══ */
+function evalSpin(fg,totalBet,isFree){
+  spinning=false;
+  const btn=document.getElementById('spinBtn');
+  btn.disabled=false; btn.classList.remove('sp');
+  btn.textContent='⚡ PUTAR';
+  const g=GAMES[gid];
+
+  /* ─── MULTIPLIER MANIA special flow ─── */
+  if(g.isMulti){
+    evalMultiSpin(fg, totalBet, isFree);
+    return;
+  }
+
+  /* ─── Normal games ─── */
+  let totalWin=0; const combos=[]; const winCells=new Set(); const plIdxs=[];
+  let scCount=0; const scCells=[];
+  for(let r=0;r<5;r++)for(let row=0;row<3;row++){
+    if(fg[r][row]===g.scatter){scCount++;scCells.push(`${r}${row}`);}
+  }
+  const actPL=PLS.slice(0,lines);
+  for(let li=0;li<actPL.length;li++){
+    const pl=actPL[li];
+    const ls=pl.map((row,reel)=>fg[reel][row]);
+    let first=ls[0]===g.scatter?null:ls[0]===g.wild?(ls.find(s=>s!==g.wild&&s!==g.scatter)||null):ls[0];
+    if(!first)continue;
+    let cnt=0;
+    for(let i=0;i<5;i++){if(ls[i]===first||ls[i]===g.wild)cnt++;else break;}
+    if(cnt>=3){
+      const m=g.mults[first]||2, bonus=cnt===5?3:cnt===4?2:1;
+      const lw=bet*m*bonus; totalWin+=lw;
+      combos.push({sym:first,cnt,win:lw,li});
+      plIdxs.push(li);
+      for(let i=0;i<cnt;i++)winCells.add(`${i}${pl[i]}`);
+    }
+  }
+  winCells.forEach(k=>{const c=document.getElementById('s'+k);if(c){c.classList.remove('win');void c.offsetWidth;c.classList.add('win');}});
+  scCells.forEach(k=>{const c=document.getElementById('s'+k);if(c){c.classList.remove('scatter-glow');void c.offsetWidth;c.classList.add('scatter-glow');}});
+  plIdxs.forEach(li=>{if(li<3){const el=document.getElementById('pl'+li);if(el)el.classList.add('show');}});
+  let triggeredFS=false;
+  if(scCount>=3&&!inFS){triggeredFS=true;fsLeft=10;const sp=bet*scCount*4;totalWin+=sp;combos.push({sym:g.scatter,cnt:scCount,win:sp,scatter:true});}
+  else if(scCount>=3&&inFS){fsLeft+=5;upFSBadge();}
+  if(totalWin>0){bal+=totalWin;stats.w++;stats.net+=totalWin;}
+  upBal();upStats();upJP();
+  const top=[...combos].sort((a,b)=>b.win-a.win)[0];
+  const isMega=top&&(g.mults[top.sym]||0)>=40&&top.cnt>=5;
+  const isMain=!isMega&&top&&(g.mults[top.sym]||0)>=25&&top.cnt>=5;
+  const isMini=!isMega&&!isMain&&top&&(g.mults[top.sym]||0)>=18&&top.cnt>=4;
+  const after=()=>{
+    if(triggeredFS)setTimeout(()=>showFSPop(scCount,g.scatter),350);
+    else if(fsLeft>0)setTimeout(doSpin,880);
+    else{inFS=false;contAuto();}
+  };
+  if(isMega){const jw=totalWin+jpMegaV;bal+=jpMegaV;stats.net+=jpMegaV;jpMegaV=350000;upBal();scheduleWinnerToast(jw);showJPPop('💎 MEGA JACKPOT! 💎',jw,after);}
+  else if(isMain){const jw=totalWin+jpMainV;bal+=jpMainV;stats.net+=jpMainV;jpMainV=75000;upBal();scheduleWinnerToast(jw);showJPPop('🎉 JACKPOT! 🎉',jw,after);}
+  else if(isMini){const jw=totalWin+jpMiniV;bal+=jpMiniV;stats.net+=jpMiniV;jpMiniV=15000;upBal();scheduleWinnerToast(jw);showJPPop('✨ MINI JACKPOT! ✨',jw,after);}
+  else{
+    if(totalWin>0){
+      const tc=combos[0];
+      const ct=tc?(tc.scatter?`${tc.sym}×${tc.cnt} Scatter — FREE SPIN! 🎁`:`${tc.sym} ×${tc.cnt} — ${tc.cnt>=5?'FULL LINE! 🔥':tc.cnt>=4?'BIG WIN! ⚡':'WIN ✨'}`):'';
+      showWin(isFree?'FREE SPIN MENANG! 🎁':'MENANG!',true,totalWin,ct,totalWin>bet*lines*8?'🎉':totalWin>bet*lines*3?'🌟':'✨');
+    }else showWin(isFree?'Free Spin — coba lagi!':'Tidak menang — coba lagi!',false,0,'','😮');
+    after();
+  }
+}
+
+/* ══════════════════════════════════════════════
+   MULTIPLIER MANIA FULL SYSTEM
+══════════════════════════════════════════════ */
+
+/* Pilih entry perkalian berdasarkan bobot */
+function pickMultEntry(g){
+  const tot=g.multTable.reduce((a,b)=>a+b.w,0);
+  let r=Math.random()*tot;
+  for(let i=0;i<g.multTable.length;i++){r-=g.multTable[i].w;if(r<=0)return g.multTable[i];}
+  return g.multTable[0];
+}
+
+/* Build grid panel di lobby multi-panel */
+function buildMultiGrid(){
+  const g=GAMES['multi'];
+  const grid2=document.getElementById('mpGrid');
+  if(!grid2)return;
+  grid2.innerHTML='';
+  g.multTable.forEach(entry=>{
+    const b=document.createElement('div');
+    b.className='mpb'; b.id='mpb_'+entry.v; b.setAttribute('data-t',entry.tier);
+    b.innerHTML=`<div class="mpb-val">${entry.lbl}</div><div class="mpb-lbl">${entry.tier===10?'ULTRA':entry.tier>=8?'Jarang':entry.tier>=6?'Langka':entry.tier>=4?'Bagus':'Normal'}</div>`;
+    grid2.appendChild(b);
+  });
+}
+
+function evalMultiSpin(fg, totalBet, isFree){
+  const g=GAMES[gid];
+  document.getElementById('scatterResultBox').classList.remove('show');
+
+  /* Hitung scatter di seluruh grid */
+  let scCount=0; const scCells=[];
+  for(let r=0;r<5;r++)for(let row=0;row<3;row++){
+    if(fg[r][row]===g.scatter){scCount++;scCells.push(`${r}${row}`);}
+  }
+  scCells.forEach(k=>{const c=document.getElementById('s'+k);if(c){c.classList.remove('scatter-glow');void c.offsetWidth;c.classList.add('scatter-glow');}});
+
+  /* Hitung kemenangan payline dulu (tanpa multiplier) */
+  let baseWin=0; const winCells=new Set(); const plIdxs=[];
+  const actPL=PLS.slice(0,lines);
+  for(let li=0;li<actPL.length;li++){
+    const pl=actPL[li];
+    const ls=pl.map((row,reel)=>fg[reel][row]);
+    let first=ls[0]===g.scatter?null:ls[0]===g.wild?(ls.find(s=>s!==g.wild&&s!==g.scatter)||null):ls[0];
+    if(!first)continue;
+    let cnt=0;
+    for(let i=0;i<5;i++){if(ls[i]===first||ls[i]===g.wild)cnt++;else break;}
+    if(cnt>=3){
+      const m=g.mults[first]||2, bonus=cnt===5?3:cnt===4?2:1;
+      baseWin+=bet*m*bonus;
+      plIdxs.forEach(x=>{});plIdxs.push(li);
+      for(let i=0;i<cnt;i++)winCells.add(`${i}${pl[i]}`);
+    }
+  }
+  plIdxs.forEach(li=>{if(li<3){const el=document.getElementById('pl'+li);if(el)el.classList.add('show');}});
+
+  if(baseWin>0 || scCount>=1){
+    /* ── Tentukan multiplier baru yang turun ── */
+    const newMultEntry = pickMultEntry(g);
+    const newMult = newMultEntry.v;
+
+    /* ── Animasi: simbol menang vanish lalu muncul lagi sebagai simbol perkalian ── */
+    if(baseWin>0){
+      winCells.forEach(k=>{
+        const c=document.getElementById('s'+k);
+        if(!c)return;
+        c.classList.add('vanish');
+        setTimeout(()=>{
+          c.classList.remove('vanish','win');
+          c.classList.add('is-mult');
+          c.innerHTML=`<div class="sym-inner">${newMultEntry.lbl}</div>`;
+          setTimeout(()=>{
+            /* Respawn: kembali ke simbol normal setelah animasi */
+            setTimeout(()=>{
+              c.classList.remove('is-mult');
+              c.innerHTML=fg[parseInt(k[0])][parseInt(k[1])];
+            },1800);
+          },50);
+        },360);
+      });
+    }
+
+    /* Scatter juga bisa membawa multiplier */
+    scCells.forEach(k=>{
+      const c=document.getElementById('s'+k);
+      if(!c)return;
+      c.classList.add('vanish');
+      setTimeout(()=>{
+        c.classList.remove('vanish','scatter-glow');
+        c.classList.add('is-mult');
+        c.innerHTML=`<div class="sym-inner">${newMultEntry.lbl}</div>`;
+        setTimeout(()=>{
+          setTimeout(()=>{c.classList.remove('is-mult');c.innerHTML=g.scatter;},1800);
+        },50);
+      },400);
+    });
+
+    /* ── Hitung total: storedMult + newMult (dijumlahkan, bukan dikali) ── */
+    const prevStored = storedMult;
+    const combinedMult = prevStored + newMult - 1; /* 1+1=1, 2+3=4, dst (base 1) */
+    /* Sederhananya: simpan sebagai penjumlahan nilai, bukan kali */
+    storedMult = combinedMult;
+
+    const finalWin = Math.round(baseWin * combinedMult);
+    const scatterBonus = scCount>=1 ? Math.round(bet * scCount * newMult * 2) : 0;
+    const totalWin = finalWin + scatterBonus;
+
+    if(totalWin>0){bal+=totalWin;stats.w++;stats.net+=totalWin;}
+    upBal();upStats();upJP();
+
+    /* Nyalakan panel perkalian */
+    lightMultiGrid(newMult, combinedMult);
+
+    /* Update stored bar */
+    document.getElementById('storedMultBar').classList.add('show');
+    document.getElementById('storedMultVal').textContent='×'+combinedMult;
+    document.getElementById('mpStoredBadge').textContent='Tersimpan: ×'+combinedMult;
+    document.getElementById('mpStoredBadge').classList.add('show');
+
+    /* Result teks */
+    const res=document.getElementById('mpResult');
+    let resText='';
+    if(baseWin>0&&combinedMult>1) resText=`Base +${fmt(baseWin)} × ${combinedMult} = +${fmt(finalWin)}`;
+    else if(baseWin>0) resText=`+${fmt(baseWin)}`;
+    if(scatterBonus>0) resText+=(resText?' · ':'')+`Scatter +${fmt(scatterBonus)}`;
+    res.textContent=resText;
+    res.className='mp-result'+(combinedMult>=10?' big':'');
+
+    setTimeout(()=>{
+      if(totalWin>0){
+        showWin('MENANG! ⚡',true,totalWin,
+          `×${newMult} turun${prevStored>1?` + ×${prevStored} simpan = ×${combinedMult} total!`:''} 🔥`,
+          combinedMult>=20?'💥':combinedMult>=5?'🎉':'✨');
+      }
+    },600);
+
+    /* Scatter trigger: 3+ scatter → tampilkan hasil & reset */
+    if(scCount>=3){
+      multiScatterWins.push({spin:stats.sp, win:totalWin, mult:combinedMult});
+      setTimeout(()=>{
+        showScatterResult(multiScatterWins, combinedMult);
+        storedMult=1; /* reset setelah scatter selesai */
+        upStoredMultUI();
+      },2200);
+    }
+
+    /* Jackpot untuk ultra mult */
+    if(combinedMult>=100){
+      const jw=totalWin+jpMegaV;bal+=jpMegaV;stats.net+=jpMegaV;jpMegaV=350000;upBal();
+      scheduleWinnerToast(jw);
+      setTimeout(()=>showJPPop('💥 ULTRA ×100 JACKPOT! 💥',jw,()=>contAuto()),2400);
+      return;
+    }
+
+    upBal();
+    setTimeout(contAuto, scCount>=3?3000:1800);
+  } else {
+    /* Tidak menang — reset perkalian TIDAK di-reset, tetap tersimpan */
+    showWin('Tidak menang','wait',0,'Perkalian tersimpan tetap: ×'+storedMult,'😮');
+    /* update tampilan */
+    document.getElementById('mpResult').textContent='Tidak menang · Perkalian ×'+storedMult+' tetap tersimpan';
+    contAuto();
+  }
+}
+
+function lightMultiGrid(newV, combinedV){
+  const g=GAMES['multi'];
+  g.multTable.forEach(entry=>{
+    const b=document.getElementById('mpb_'+entry.v);
+    if(!b)return;
+    b.classList.remove('lit','stored');
+    if(entry.v===newV) b.classList.add('lit');
+    else if(entry.v===combinedV&&combinedV!==newV) b.classList.add('stored');
+  });
+}
+
+function upStoredMultUI(){
+  const bar=document.getElementById('storedMultBar');
+  const badge=document.getElementById('mpStoredBadge');
+  if(storedMult>1){
+    bar.classList.add('show');
+    document.getElementById('storedMultVal').textContent='×'+storedMult;
+    badge.textContent='Tersimpan: ×'+storedMult;
+    badge.classList.add('show');
+  } else {
+    bar.classList.remove('show');
+    badge.classList.remove('show');
+  }
+  /* Reset semua lit */
+  const g=GAMES['multi'];
+  if(g) g.multTable.forEach(entry=>{
+    const b=document.getElementById('mpb_'+entry.v);
+    if(b) b.classList.remove('lit','stored');
+  });
+  document.getElementById('mpResult').textContent='';
+}
+
+function resetStoredMult(){
+  storedMult=1;
+  upStoredMultUI();
+  document.getElementById('scatterResultBox').classList.remove('show');
+}
+
+function showScatterResult(wins, finalMult){
+  const box=document.getElementById('scatterResultBox');
+  const totalAll=wins.reduce((a,b)=>a+b.win,0);
+  document.getElementById('srbMsg').textContent=
+    `Scatter selesai! Perkalian tertinggi ×${finalMult} · Total ${wins.length} kemenangan`;
+  const amts=document.getElementById('srbAmounts');
+  amts.innerHTML='';
+  wins.slice(-3).forEach((w,i)=>{
+    amts.innerHTML+=`<div class="srb-item"><div class="srb-item-lbl">Spin ${w.spin} ×${w.mult}</div><div class="srb-item-val">+${fmt(w.win)}</div></div>`;
+  });
+  if(wins.length>3) amts.innerHTML=`<div class="srb-item"><div class="srb-item-lbl">Total ${wins.length} spin</div><div class="srb-item-val">+${fmt(totalAll)}</div></div>`;
+  box.classList.add('show');
+  multiScatterWins=[];
+  scheduleWinnerToast(totalAll);
+}
+
+function contAuto(){
+  if(autoCount>0){
+    autoCount--;
+    document.getElementById('aStop').textContent=autoCount>0?`Stop (${autoCount})`:'Stop';
+    if(autoCount>0&&bal>=bet*lines)autoTimer=setTimeout(doSpin,880);
+    else stopAuto();
+  }
+}
+
+/* ══ WIN PANEL ══ */
+function resetWin(){
+  const lbl=document.getElementById('wlbl');
+  lbl.textContent='Tekan PUTAR untuk main';lbl.className='wlbl';
+  document.getElementById('wamt').style.display='none';
+  document.getElementById('wcombo').textContent='';
+  document.getElementById('wemoji').textContent='';
+}
+function showWin(label,isW,amount,combo,emoji){
+  const lbl=document.getElementById('wlbl');
+  lbl.textContent=label;lbl.className='wlbl'+(isW?' w':'');
+  const a=document.getElementById('wamt');
+  if(isW&&amount>0){a.textContent='+'+fmt(amount);a.style.display='block';a.style.animation='none';void a.offsetWidth;a.style.animation='wPop .4s cubic-bezier(.22,1,.36,1)';}
+  else a.style.display='none';
+  document.getElementById('wcombo').textContent=combo;
+  document.getElementById('wemoji').textContent=emoji;
+}
+
+/* ══ PAYLINE VISUALS ══ */
+function clearPLvis(){
+  ['pl0','pl1','pl2'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('show');});
+  document.querySelectorAll('.sym').forEach(c=>{
+    c.classList.remove('win','scatter-glow','vanish','appear','is-mult');
+    /* restore textContent jika isi-mult mengubahnya */
+  });
+}
+
+/* ══ AUTO SPIN ══ */
+function startAuto(n){
+  stopAuto(); autoCount=n;
+  document.querySelectorAll('.abtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('a'+n).classList.add('on');
+  document.getElementById('aStop').classList.add('on');
+  document.getElementById('aStop').textContent=`Stop (${n})`;
+  doSpin();
+}
+function stopAuto(){
+  clearTimeout(autoTimer);autoCount=0;
+  document.querySelectorAll('.abtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('aStop').textContent='Stop';
+}
+
+/* ══ JACKPOT POPUP ══ */
+let _jpCb=null;
+function showJPPop(title,amount,cb){
+  _jpCb=cb||null;
+  document.getElementById('jpTitle').textContent=title;
+  document.getElementById('jpAmt').textContent='+'+fmt(amount);
+  document.getElementById('jpPop').classList.add('show');
+}
+function closeJP(){
+  const a=parseInt(document.getElementById('jpAmt').textContent.replace(/\D/g,''));
+  document.getElementById('jpPop').classList.remove('show');
+  showWin('JACKPOT! 🎉',true,a,'','🌟');
+  upBal();upStats();
+  if(_jpCb){_jpCb();_jpCb=null;}
+}
+
+/* ══ FREE SPIN POPUP ══ */
+function showFSPop(cnt,scSym){
+  document.getElementById('fsScatterEmoji').textContent=scSym.repeat?`${scSym} ${scSym} ${scSym}`:scSym;
+  document.getElementById('fsScatLabel').textContent=cnt+' Scatter Muncul!';
+  document.getElementById('fsPop').classList.add('show');
+}
+function closeFSPop(){
+  document.getElementById('fsPop').classList.remove('show');
+  upFSBadge();
+  setTimeout(doSpin,400);
+}
+
+/* ══ WINNER TOAST NOTIFICATION ══ */
+function scheduleWinnerToast(jackpotAmount){
+  /* Show 1 toast immediately (the current user), then random ones over next 20s */
+  spawnToast(jackpotAmount, true);
+  const count=Math.floor(Math.random()*3)+2; // 2-4 more random
+  for(let i=0;i<count;i++){
+    setTimeout(()=>spawnToast(jackpotAmount*(0.4+Math.random()*1.6)),2000+i*4500+Math.random()*2000);
+  }
+}
+
+/* Periodic random winner toasts (independent of play) */
+function randomToastLoop(){
+  const delay=18000+Math.random()*25000; // 18-43 detik
+  setTimeout(()=>{
+    const amt=(Math.floor(Math.random()*80)+5)*1000;
+    spawnToast(amt,false);
+    randomToastLoop();
+  },delay);
+}
+
+function spawnToast(amount,isMe=false){
+  const wrap=document.getElementById('toast-wrap');
+  const name=isMe?'Kamu':NAMES[Math.floor(Math.random()*NAMES.length)];
+  const city=CITIES[Math.floor(Math.random()*CITIES.length)];
+  const t=document.createElement('div'); t.className='toast';
+  const icon=amount>200000?'💎':amount>100000?'🌟':amount>50000?'🎉':'🎊';
+  t.innerHTML=`
+    <div class="toast-icon">${icon}</div>
+    <div class="toast-body">
+      <div class="toast-name">${isMe?'🎉 Selamat!':name+' ('+city+')'}</div>
+      <div class="toast-msg">${isMe?'Kamu memenangkan jackpot!':'memenangkan uang sebesar'}</div>
+    </div>
+    <div class="toast-amt">+${fmt(amount)}</div>
+  `;
+  wrap.appendChild(t);
+  /* Remove after 5.5s */
+  setTimeout(()=>{
+    t.classList.add('out');
+    setTimeout(()=>{if(t.parentNode)t.parentNode.removeChild(t);},360);
+  },5200);
+  /* Keep max 3 toasts */
+  const all=wrap.querySelectorAll('.toast:not(.out)');
+  if(all.length>3)all[0].classList.add('out');
+}
+
+/* ══ PAYTABLE ══ */
+function buildPT(){
+  const g=GAMES[gid], panel=document.getElementById('ptPanel');
+  panel.innerHTML=`<div class="pthdr">TABEL PEMBAYARAN — ${g.name.toUpperCase()}</div>`;
+  [...g.syms].filter(s=>s!==g.scatter).sort((a,b)=>(g.mults[b]||0)-(g.mults[a]||0)).forEach(sym=>{
+    const m=g.mults[sym]||1, row=document.createElement('div'); row.className='ptrow';
+    row.innerHTML=`<span class="ptsyms">${sym}${sym}${sym}</span><span class="ptm">×${m} | 4= ×${m*2} | 5= ×${m*3}</span>`;
+    panel.appendChild(row);
+  });
+  const wr=document.createElement('div');wr.className='ptrow';
+  wr.innerHTML=`<span class="ptsyms" style="color:var(--gold)">${g.wild} Wild</span><span class="ptm" style="color:var(--gold)">Ganti semua simbol</span>`;
+  panel.appendChild(wr);
+  const sr=document.createElement('div');sr.className='ptrow';
+  sr.innerHTML=`<span class="ptsyms" style="color:var(--teal)">${g.scatter} Scatter</span><span class="ptm" style="color:var(--teal)">3+ di mana saja = 10 FREE SPIN 🎁</span>`;
+  panel.appendChild(sr);
+  const ft=document.createElement('div');ft.className='ptfoot';
+  ft.innerHTML=`Win rate ~36% · Scatter sekitar 5% peluang per reel per baris`;
+  panel.appendChild(ft);
+}
+function togglePT(){ptOpen=!ptOpen;document.getElementById('ptPanel').classList.toggle('open',ptOpen);}
+
+/* ══ INIT ══ */
+upBal(); upJP();
+randomToastLoop(); // mulai loop notifikasi random pemenang
+</script>
+</body>
+</html>
